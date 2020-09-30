@@ -3,7 +3,7 @@ import re
 
 
 def empty(x):
-    return len(x) == 0
+    return True if (x == None or len(x) == 0) else False
 
 
 def validate_email(email):
@@ -15,8 +15,9 @@ def validate_email(email):
         return False
 
 
-def validate_date(day, month, year):
+def validate_date(date):
     try:
+        year, month , day = map(int, date.split('-'))
         a = datetime.datetime(year=year, month=month, day=day)
         return True
     except ValueError:

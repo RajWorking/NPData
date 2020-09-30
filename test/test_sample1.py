@@ -1,9 +1,12 @@
-import src.species
+import sys
+
+sys.path.append('.')
+import src.Employee
 
 
 def insert():
-    tmp = src.species.Species()
-    print(tmp.add())
+    tmp = src.Employee.Employee()
+    print(tmp.hire())
 
 
 insert()

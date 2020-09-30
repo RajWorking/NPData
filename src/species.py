@@ -24,7 +24,8 @@ class Species:
 
     def add(self):
         def sci_name():
-            self.genus, self.specific_name = input("Enter the scientific Name of the Species:").split()
+            self.genus, self.specific_name = input(
+                "Enter the scientific Name of the Species:").split()
             if not syntax.empty(self.genus) and not syntax.empty(self.specific_name):
                 self.genus = self.genus.lower()
                 self.specific_name = self.specific_name.lower()
@@ -60,7 +61,8 @@ class Species:
 
         def vulnerability():
             self.vulnerability = int(
-                input('Enter the corresponding option for the vulnerability status of the species:'))
+                input(
+                    'Enter the corresponding option for the vulnerability status of the species:'))
             self.vulnerability -= 1
             if not syntax.validate_range(self.vulnerability, 0, len(self.vulnerability_enum)):
                 print("must be from one of the options")
@@ -84,8 +86,10 @@ class Species:
             val()
 
             query = "INSERT INTO Species(genus, specific_name, taxonomy_code, name, vulnerability, average_lifespace)" \
-                    "VALUES('{}', '{}', '{}', '{}', {})".format(self.genus, self.specific_name, self.taxonomy_code,
-                                                                self.vulnerability, self.average_lifespan)
+                    "VALUES('{}', '{}', '{}', '{}', {})".format(self.genus, self.specific_name,
+                                                                self.taxonomy_code,
+                                                                self.vulnerability,
+                                                                self.average_lifespan)
             return query
 
         except ValueError as e:

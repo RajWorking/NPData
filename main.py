@@ -2,17 +2,15 @@ import subprocess as sp
 import pymysql.cursors
 import config
 
-from tables.Employee import Employee
-from tables.Department import Department
-from tables.User import User
-from tables.Services import Service
-from tables.Feedback import ServiceFeedback, FeatureFeedback
+from src.Employee import Employee
+from src.Department import Department
+from src.User import User
+from src.Services import Service
+from src.Feedback import ServiceFeedback, FeatureFeedback
 
-
-
-def execute_query(query, values):
+def execute_query(query):
     try:
-        cur.execute(query, values)
+        cur.execute(query)
         con.commit()
         print("Inserted Into Database")
     except Exception as e:
@@ -23,24 +21,24 @@ def execute_query(query, values):
 
 def dispatch(option):
     if option == 1:
-        query, values = Employee().hire()
+        query = Employee().hire()
     elif option == 2:
-        query, values = Department().add()
+        query = Department().add()
     elif option == 3:
-        query, values = User().hire()
+        query = User().hire()
     elif option == 4:
-        query, values = Service().add()
+        query = Service().add()
     elif option == 8:
-        query, values = ServiceFeedback().add()
+        query = ServiceFeedback().add()
     elif option == 9:
-        query, values = FeatureFeedback().add()
+        query = FeatureFeedback().add()
     elif option == 11:
-        query, values = Department.remove()
+        query = Department.remove()
     else:
         print("Error: Invalid Option")
         return
 
-    execute_query(query, values)
+    execute_query(query)
 
 
 while True:
@@ -88,6 +86,5 @@ while True:
 
     except:
         tmp = sp.call('clear', shell=True)
-        print(
-            "Connection Refused: Either username or password is incorrect or user doesn't have access to database")
+        print("Connection Refused")
         tmp = input("Enter any key to CONTINUE> ")
