@@ -34,8 +34,6 @@ def dispatch(option):
         query, values = ServiceFeedback().add()
     elif option == 9:
         query, values = FeatureFeedback().add()
-    elif option == 10:
-        query, values = User.hire()
     elif option == 11:
         query, values = Department.remove()
     else:
