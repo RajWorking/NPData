@@ -6,7 +6,8 @@ from src.Employee import Employee
 from src.Department import Department
 from src.User import User
 from src.Services import Service
-from src.Feedback import ServiceFeedback, FeatureFeedback
+from src.Feedback import Feedback
+
 
 def execute_query(query):
     try:
@@ -20,6 +21,7 @@ def execute_query(query):
 
 
 def dispatch(option):
+    global query
     if option == 1:
         query = Employee().hire()
     elif option == 2:
@@ -29,9 +31,9 @@ def dispatch(option):
     elif option == 4:
         query = Service().add()
     elif option == 8:
-        query = ServiceFeedback().add()
+        query = Feedback("service").add()
     elif option == 9:
-        query = FeatureFeedback().add()
+        query = Feedback("feature").add()
     elif option == 11:
         query = Department.remove()
     else:

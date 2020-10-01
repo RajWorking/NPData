@@ -1,8 +1,8 @@
 import src.utils.syntax_check as syntax
-from src.utils.utils import repeat_and_error
+from src.utils.utils import repeat_and_error, perror, psuccess
 
-# still doesnot work for empty line in int
-# gender options 4 option is true
+
+# contact number is not inserted
 
 class Employee:
     gender_enum = [
@@ -16,6 +16,7 @@ class Employee:
         self.emp_Name = None
         self.gender = None
         self.emp_email = None
+        self.contact_number = None
         self.date_of_birth = None
         self.date_of_joining = None
         self.role = None
@@ -23,12 +24,12 @@ class Employee:
         self.national_park = None
 
     def get_id(self):
-        self.emp_id = input("Enter Employee ID: ")
-        return print("ID cannot be empty") if syntax.empty(self.emp_id) else True
+        self.emp_id = int(input("Enter Employee ID: "))
+        return True
 
     def get_name(self):
-        self.emp_Name = input("Enter the Name of the Employee: ")
-        return print("Name cannot be empty") if syntax.empty(self.emp_Name) else True
+        self.emp_Name = input("Enter the Name of the Employee: ").lower()
+        return perror("Name cannot be empty") if syntax.empty(self.emp_Name) else True
 
     def get_gender_options(self):
         print("Choose one among the genders: ")
@@ -37,55 +38,60 @@ class Employee:
 
     def get_gender(self):
         self.gender = int(input('Choosing the following for gender of Employee: '))
-        self.gender -= 1
-        return print("Gender must be from one of the options") if not syntax.validate_range(
-            self.gender, 0, len(self.gender_enum)) else True
+        return perror("Gender must be from one of the options") if not syntax.validate_range(
+            self.gender, 1, len(self.gender_enum)) else True
 
     def get_email(self):
-        self.emp_email = input("Enter the email of the Employee: ")
-        return print("Invalid email") if not syntax.validate_email(self.emp_email) else True
+        self.emp_email = input("Enter the email of the Employee: ").lower()
+        return perror("Invalid email") if not syntax.validate_email(self.emp_email) else True
+
+    def get_contact(self):
+        self.emp_email = input("Enter the Contact Number of the Employee: ").lower()
+        return perror("Invalid Contact Number") if not syntax.validate_phone_number(
+            self.emp_email) else True
 
     def get_dob(self):
         self.date_of_birth = input("Enter Birth Date (YYYY-MM-DD): ")
-        return print("Invalid Date") if not syntax.validate_date(self.date_of_birth) else True
+        return perror("Invalid Date") if not syntax.validate_date(self.date_of_birth) else True
 
     def get_doj(self):
         self.date_of_joining = input("Enter Date Of Joining (YYYY-MM-DD): ")
-        return print("Invalid Date") if not syntax.validate_date(self.date_of_joining) else True
+        return perror("Invalid Date") if not syntax.validate_date(self.date_of_joining) else True
 
     def get_role(self):
-        self.role = input("Enter Role of Employee: ")
-        return print("Role cannot be empty") if syntax.empty(self.role) else True
+        self.role = input("Enter Role of Employee: ").lower()
+        return perror("Role cannot be empty") if syntax.empty(self.role) else True
 
     def get_dno(self):
-        self.works_for_dno = input("Enter Department Number for above employee: ")
-        return print("Department Number cannot be empty") if syntax.empty(
-            self.works_for_dno) else True
+        self.works_for_dno = int(input("Enter Department Number for above employee: "))
+        return True
 
     def get_national_park(self):
-        self.national_park = input("Enter the Code of National Park in which the employee works: ")
-        return print("Unit code cannot be empty") if syntax.empty(self.national_park) else True
+        self.national_park = int(
+            input("Enter the Code of National Park in which the employee works: "))
+        return True
 
     def hire(self):
         print("Enter new Employee's details: ")
 
         try:
-            repeat_and_error(self.get_id, None)()
-            repeat_and_error(self.get_name, None)()
+            repeat_and_error(self.get_id)()
+            repeat_and_error(self.get_name)()
             repeat_and_error(self.get_gender, self.get_gender_options)()
-            repeat_and_error(self.get_email, None)()
-            repeat_and_error(self.get_dob, None)()
-            repeat_and_error(self.get_doj, None)()
-            repeat_and_error(self.get_role, None)()
-            repeat_and_error(self.get_dno, None)()
-            repeat_and_error(self.get_national_park, None)()
+            repeat_and_error(self.get_email)()
+            repeat_and_error(self.get_contact)()
+            repeat_and_error(self.get_dob)()
+            repeat_and_error(self.get_doj)()
+            repeat_and_error(self.get_role)()
+            repeat_and_error(self.get_dno)()
+            repeat_and_error(self.get_national_park)()
 
-            query = "INSERT INTO Employee(emp_id, emp_Name, gender, emp_email,date_of_birth, " \
-                    "date_of_joining, role, works_for_dno, national_park)" \
-                    "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
-                self.emp_id, self.emp_Name,
-                self.gender, self.emp_email, self.date_of_birth,
-                self.date_of_joining, self.role, self.works_for_dno, self.national_park)
+            query = "INSERT INTO Employee(emp_id, emp_Name, gender, emp_email, contact_number,  " \
+                    "date_of_birth, date_of_joining, role, works_for_dno, national_park)" \
+                    "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+                self.emp_id, self.emp_Name, self.gender, self.emp_email,
+                self.contact_number, self.date_of_birth, self.date_of_joining,
+                self.role, self.works_for_dno, self.national_park)
 
             print(query)
             return query

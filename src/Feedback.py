@@ -1,46 +1,57 @@
-class ServiceFeedback:
-    def __init__(self):
-        self.feature_id = None
+import src.utils.syntax_check as syntax
+from src.utils.utils import repeat_and_error, perror, psuccess
+
+
+class Feedback:
+    def __init__(self, type):
+        self.id = {
+            "id": None,
+            "type": type
+        }
         self.user_id = None
         self.rating = None
         self.remarks = None
         self.date = None
 
-    def add(self):
-        print("Please provide the details of feedback: ")
-        self.service_id = input("Service ID: ")
-        self.user_id = int(input("User ID: "))
-        self.rating = float(input("Rating: "))
-        self.remarks = input("Remarks: ")
-        self.date = input("Date (YYYY-MM-DD): ")
+    def get_id(self):
+        self.user_id = int(input("Enter User ID: "))
+        return True
 
-        query = """INSERT INTO Service_Feedback(service_id, user_id, rating, remarks, date)
-          VALUES (%s, %s, %s, %s, %s)"""
-        values = (self.service_id, self.user_id, self.rating, self.remarks, self.date)
+    def get_fs_id(self):
+        self.id["id"] = int(input("Enter " + self.id["type"] + "ID: "))
+        return True
 
-        print(query, values)
-        return [query, values]
+    def get_rating(self):
+        self.rating = float(input("Enter Rating: "))
+        return perror("Username cannot be empty") if syntax.empty(self.rating) else True
 
+    def get_remarks(self):
+        self.remarks = input("Enter Remarks: ").lower()
+        return perror("Remarks cannot be empty") if syntax.empty(self.remarks) else True
 
-class FeatureFeedback:
-    def __init__(self):
-        self.feature_id = None
-        self.user_id = None
-        self.rating = None
-        self.remarks = None
-        self.date = None
+    def get_date(self):
+        self.date = input("Enter Date of writing feedback (YYYY-MM-DD): ")
+        return perror("Invalid Date") if not syntax.validate_date(self.date) else True
 
     def add(self):
+
         print("Please provide the details of feedback: ")
-        self.feature_id = input("Feature ID: ")
-        self.user_id = int(input("User ID: "))
-        self.rating = float(input("Rating: "))
-        self.remarks = input("Remarks: ")
-        self.date = input("Date (YYYY-MM-DD): ")
 
-        query = """INSERT INTO Feature_Feedback(feature_id,user_id, rating, remarks, date)
-          VALUES (%s, %s, %s, %s, %s)"""
-        values = (self.feature_id, self.user_id, self.rating, self.remarks, self.date)
+        repeat_and_error(self.get_id)()
+        repeat_and_error(self.get_fs_id)()
+        repeat_and_error(self.get_rating)()
+        repeat_and_error(self.get_remarks)()
+        repeat_and_error(self.get_date)()
 
-        print(query, values)
-        return [query, values]
+        global query
+        if self.id["type"] == "feature":
+            query = "INSERT INTO Feature_Feedback(feature_id, user_id, rating, remarks, date)" \
+                    "VALUES ('{}', '{}', '{}', '{}', '{}')".format(
+                self.id["id"], self.user_id, self.rating, self.remarks, self.date)
+        elif self.id["type"] == "service":
+            query = "INSERT INTO Service_Feedback(service_id, user_id, rating, remarks, date)" \
+                    "VALUES ('{}', '{}', '{}', '{}', '{}')".format(
+                self.id["id"], self.user_id, self.rating, self.remarks, self.date)
+
+        print(query)
+        return query
