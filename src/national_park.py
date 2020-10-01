@@ -10,7 +10,10 @@ class NationalPark:
 
     def add(self):
         print("Enter National Park's details: ")
-        self.unitcode = int(input("Enter unitcode: "))
+
+        def getunitcode():
+            self.unitcode = int(input("Enter unitcode: "))
+
         self.name = input("Enter Name: ").lower()
         self.region_code = input("Enter Region code: ").lower()
         self.boundary = input("Enter Boundary: ")
