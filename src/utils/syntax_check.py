@@ -15,8 +15,10 @@ def validate_email(email):
         return False
 
 
-def validate_date(day, month, year):
+
+def validate_date(date):
     try:
+        year, month, day = map(int, date.split('-'))
         a = datetime.datetime(year=year, month=month, day=day)
         return True
     except ValueError:
@@ -33,3 +35,7 @@ def validate_range(x, lo, hi):
 
 def validate_phone_number(num):
     regex = '^[0-9]{10}'
+    if re.search(regex, num):
+        return True
+    else:
+        return False

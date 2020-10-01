@@ -7,5 +7,4 @@ def insert():
     tmp = src.national_park.NationalPark()
     print(tmp.add())
 
-
 insert()

@@ -1,12 +1,8 @@
-import subprocess as sp
-
 import pymysql.cursors
 
 import config
 
 while True:
-    tmp = sp.call('clear', shell=True)
-
     try:
         # Set db name accordingly which have been create by you
         # Set host to the server's address if you don't want to use local SQL server
@@ -18,17 +14,13 @@ while True:
             port=config.port,
             cursorclass=pymysql.cursors.DictCursor
         )
-        tmp = sp.call('clear', shell=True)
 
         if con.open:
             print("Connected")
         else:
             print("Failed to connect")
+        tmp = input(">>>")
 
-        tmp = input("Enter any key to CONTINUE>")
-
-
-    except:
-        tmp = sp.call('clear', shell=True)
-        print("Connection Refused: Either username or password is incorrect or user doesn't have access to database")
-        tmp = input("Enter any key to CONTINUE>")
+    except pymysql.err.OperationalError as e:
+        print(e.args[0], ':', e.args[1])
+        tmp = input(">>>")
