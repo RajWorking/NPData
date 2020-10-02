@@ -2,7 +2,8 @@ import src.utils.syntax_check as syntax
 from src.utils.utils import repeat_and_error, perror, psuccess
 
 
-class Service:
+class Services:
+
     def __init__(self):
         self.service_id = None
         self.name = None
@@ -42,9 +43,9 @@ class Service:
         return True
 
     def add(self):
-        print("Enter details of new Service: ")
 
         try:
+            print("Enter details of new Service: ")
             repeat_and_error(self.get_id)()
             repeat_and_error(self.get_name)()
             repeat_and_error(self.get_availability)()
@@ -53,10 +54,13 @@ class Service:
             repeat_and_error(self.get_description)()
             repeat_and_error(self.get_national_park)()
 
-            query = "INSERT INTO Services(service_id, name, availability, capacity, price,description," \
-                    "provided_by) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
-                self.service_id, self.name, self.availability, self.capacity, self.price,
-                self.description, self.provided_by)
+            query = []
+            query.append(
+                "INSERT INTO Services(service_id, name, availability, capacity, price,description," \
+                "provided_by) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+                    self.service_id, self.name, self.availability, self.capacity, self.price,
+                    self.description, self.provided_by))
+
             print(query)
             return query
         except ValueError as e:
@@ -71,3 +75,93 @@ class Service:
         values = (self.provided_by, self.service_id)
         print(query, values)
         return [query, values]
+
+
+class ServiceTimings:
+    day_enum = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+    ]
+
+    def __init__(self):
+        self.sub_service_id = None
+        self.service_id = None
+        self.timings = None
+        self.day_of_service = None
+
+    def get_ssid(self):
+        self.sub_service_id = int(input("Enter a new ID to deploy timings: "))
+        return True
+
+    def get_sid(self):
+        self.service_id = int(input("Enter ID of service to choose timings for: "))
+        return True
+
+    def get_day_options(self):
+        print("Choose one among the following days: ")
+        for i in range(len(self.day_enum)):
+            print('{}. {}'.format(i + 1, self.day_enum[i]))
+
+    def get_day(self):
+        self.day_of_service = int(input('Choose a day for service: '))
+        return perror(
+            "Day must be from one a feedback for a featureof the options") if not syntax.validate_range(
+            self.day_of_service, 1, len(self.day_enum)) else True
+
+    def get_time(self):
+        self.timings = input('Enter the timings for service for above day(HH:MM:SS): ')
+        return perror("Invalid Time") if not syntax.validate_time(self.timings) else True
+
+    def add(self):
+
+        try:
+            print("Enter details for Service timings: ")
+            repeat_and_error(self.get_ssid)()
+            repeat_and_error(self.get_sid)()
+            repeat_and_error(self.get_day, self.get_day_options)()
+            repeat_and_error(self.get_time)()
+
+            query = []
+            query.append("INSERT INTO Service_timings(sub_service_id, service_id, day_of_service" \
+                         " timings) VALUES ('{}', '{}', '{}', '{}')".format(
+                self.sub_service_id, self.service_id, self.day_of_service, self.timings))
+
+            print(query)
+            return query
+        except ValueError as e:
+            print(e.args[0])
+
+
+class ServiceFeature:
+
+    def __init__(self):
+        self.service_id = None
+        self.feature_id = None
+
+    def get_sid(self):
+        self.service_id = int(input("Enter ID of service: "))
+        return True
+
+    def get_fid(self):
+        self.feature_id = int(input("Enter ID of feature related to service: "))
+        return True
+
+    def add(self):
+
+        try:
+            print("Enter details for Service timings: ")
+            repeat_and_error(self.get_fid)()
+            repeat_and_error(self.get_sid)()
+
+            query = []
+            query.append("INSERT INTO Service_timings(feature_id, service_id)" \
+                         " timings) VALUES ('{}', '{}')".format(self.feature_id, self.service_id))
+            print(query)
+            return query
+        except ValueError as e:
+            print(e.args[0])

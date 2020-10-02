@@ -5,19 +5,21 @@ import config
 from src.Employee import Employee
 from src.Department import Department
 from src.User import User
-from src.Services import Service
+from src.Services import *
 from src.Feedback import Feedback
 
 
 def execute_query(query):
-    try:
-        cur.execute(query)
-        con.commit()
-        print("Inserted Into Database")
-    except Exception as e:
-        con.rollback()
-        print("Failed to insert into database")
-        print(">>>>>>>>>>>>>", e)
+
+    for qr in query:
+        try:
+            cur.execute(qr)
+            con.commit()
+            print("Inserted Into Database")
+        except Exception as e:
+            con.rollback()
+            print("Failed to insert into database")
+            print(">>>>>>>>>>>>>", e)
 
 
 def dispatch(option):
@@ -29,11 +31,13 @@ def dispatch(option):
     elif option == 3:
         query = User().hire()
     elif option == 4:
-        query = Service().add()
+        query = Services().add()
     elif option == 8:
         query = Feedback("service").add()
     elif option == 9:
         query = Feedback("feature").add()
+    elif option == 10:
+        query = ServiceTimings().add()
     elif option == 11:
         query = Department.remove()
     else:
@@ -76,6 +80,7 @@ while True:
                 print("4. Add a new Service")
                 print("8. Add a feedback for a service")
                 print("9. Add a feedback for a feature")
+                print("10. Add timings for service")
                 ch = int(input("Enter choice> "))
                 tmp = sp.call('clear', shell=True)
                 if ch >= 100:

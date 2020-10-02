@@ -18,12 +18,12 @@ class Feedback:
         return True
 
     def get_fs_id(self):
-        self.id["id"] = int(input("Enter " + self.id["type"] + "ID: "))
+        self.id["id"] = int(input("Enter " + self.id["type"] + " ID: "))
         return True
 
     def get_rating(self):
         self.rating = float(input("Enter Rating: "))
-        return perror("Username cannot be empty") if syntax.empty(self.rating) else True
+        return True
 
     def get_remarks(self):
         self.remarks = input("Enter Remarks: ").lower()
@@ -43,15 +43,15 @@ class Feedback:
         repeat_and_error(self.get_remarks)()
         repeat_and_error(self.get_date)()
 
-        global query
+        query = []
         if self.id["type"] == "feature":
-            query = "INSERT INTO Feature_Feedback(feature_id, user_id, rating, remarks, date)" \
-                    "VALUES ('{}', '{}', '{}', '{}', '{}')".format(
-                self.id["id"], self.user_id, self.rating, self.remarks, self.date)
+            query.append("INSERT INTO Feature_Feedback(feature_id, user_id, rating, remarks, date)" \
+                         "VALUES ('{}', '{}', '{}', '{}', '{}')".format(
+                self.id["id"], self.user_id, self.rating, self.remarks, self.date))
         elif self.id["type"] == "service":
-            query = "INSERT INTO Service_Feedback(service_id, user_id, rating, remarks, date)" \
-                    "VALUES ('{}', '{}', '{}', '{}', '{}')".format(
-                self.id["id"], self.user_id, self.rating, self.remarks, self.date)
+            query.append("INSERT INTO Service_Feedback(service_id, user_id, rating, remarks, date)" \
+                         "VALUES ('{}', '{}', '{}', '{}', '{}')".format(
+                self.id["id"], self.user_id, self.rating, self.remarks, self.date))
 
         print(query)
         return query

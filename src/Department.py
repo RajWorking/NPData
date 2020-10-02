@@ -33,20 +33,11 @@ class Department:
             repeat_and_error(self.get_national_park)()
             repeat_and_error(self.get_supervisor)()
 
-            query = "INSERT INTO Department(dep_number, dep_name, contained_in, is_chaired_by)" \
+            query = []
+            query.append("INSERT INTO Department(dep_number, dep_name, contained_in, is_chaired_by)" \
                     "VALUES ('{}', '{}', '{}', '{}')".format(
-                self.dep_number, self.dep_name, self.contained_in, self.is_chaired_by)
+                self.dep_number, self.dep_name, self.contained_in, self.is_chaired_by))
             print(query)
             return query
         except ValueError as e:
             print(e.args[0])
-
-    def remove(self):
-        print("Enter Department's details for removal: ")
-        self.dep_number = int(input("Department Number: "))
-        self.contained_in = int(input("Present in which National Park: "))
-
-        query = """DELETE from Department WHERE (contained_in = %s and dep_number = %s)"""
-        values = (self.contained_in, self.dep_number)
-        print(query, values)
-        return [query, values]

@@ -2,8 +2,6 @@ import src.utils.syntax_check as syntax
 from src.utils.utils import repeat_and_error, perror, psuccess
 
 
-# contact number is not inserted
-
 class Employee:
     gender_enum = [
         'Male',
@@ -12,7 +10,6 @@ class Employee:
     ]
 
     def __init__(self):
-        self.emp_id = None
         self.emp_Name = None
         self.gender = None
         self.emp_email = None
@@ -23,9 +20,6 @@ class Employee:
         self.works_for_dno = None
         self.national_park = None
 
-    def get_id(self):
-        self.emp_id = int(input("Enter Employee ID: "))
-        return True
 
     def get_name(self):
         self.emp_Name = input("Enter the Name of the Employee: ").lower()
@@ -46,9 +40,9 @@ class Employee:
         return perror("Invalid email") if not syntax.validate_email(self.emp_email) else True
 
     def get_contact(self):
-        self.emp_email = input("Enter the Contact Number of the Employee: ").lower()
+        self.contact_number = input("Enter the Contact Number of the Employee: ").lower()
         return perror("Invalid Contact Number") if not syntax.validate_phone_number(
-            self.emp_email) else True
+            self.contact_number) else True
 
     def get_dob(self):
         self.date_of_birth = input("Enter Birth Date (YYYY-MM-DD): ")
@@ -75,7 +69,6 @@ class Employee:
         print("Enter new Employee's details: ")
 
         try:
-            repeat_and_error(self.get_id)()
             repeat_and_error(self.get_name)()
             repeat_and_error(self.get_gender, self.get_gender_options)()
             repeat_and_error(self.get_email)()
@@ -86,12 +79,13 @@ class Employee:
             repeat_and_error(self.get_dno)()
             repeat_and_error(self.get_national_park)()
 
-            query = "INSERT INTO Employee(emp_id, emp_Name, gender, emp_email, contact_number,  " \
-                    "date_of_birth, date_of_joining, role, works_for_dno, national_park)" \
-                    "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
-                self.emp_id, self.emp_Name, self.gender, self.emp_email,
+            query = []
+            query.append("INSERT INTO Employee( emp_Name, gender, emp_email, contact_number,  " \
+                         "date_of_birth, date_of_joining, role, works_for_dno, national_park)" \
+                         "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+                self.emp_Name, self.gender, self.emp_email,
                 self.contact_number, self.date_of_birth, self.date_of_joining,
-                self.role, self.works_for_dno, self.national_park)
+                self.role, self.works_for_dno, self.national_park))
 
             print(query)
             return query

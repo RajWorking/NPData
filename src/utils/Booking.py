@@ -1,15 +1,18 @@
 import src.utils.syntax_check as syntax
 from src.utils.utils import repeat_and_error, perror, psuccess
 
-# user id should be auto increment
-# password should be crypted
 
-class User:
+class Booking:
     def __init__(self):
+        self.user_id = None
         self.username = None
         self.email = None
         self.password = None
         self.contact_number = None
+
+    def get_id(self):
+        self.user_id = int(input("Enter User ID: "))
+        return True
 
     def get_name(self):
         self.username = input("Enter Username: ").lower()
@@ -30,15 +33,16 @@ class User:
 
     def hire(self):
         try:
+            repeat_and_error(self.get_id)()
             repeat_and_error(self.get_name)()
             repeat_and_error(self.get_email)()
             repeat_and_error(self.get_password)()
             repeat_and_error(self.get_contact)()
 
             query = []
-            query.append("INSERT INTO User( username, email, password,contact_number)" \
-                         "VALUES ( '{}', '{}', '{}', '{}')".format(
-                self.username, self.email, self.password, self.contact_number))
+            query.append("INSERT INTO User(user_id, username, email, password,contact_number)" \
+                         "VALUES ('{}', '{}', '{}', '{}', '{}')".format(
+                self.user_id, self.username, self.email, self.password, self.contact_number))
             print(query)
             return query
 
