@@ -50,31 +50,24 @@ def delete_query(query):
 
 def dispatch(option):
     if option == 1:
-        query = Employee().hire()
+        insert_query(Employee().hire())
+
     elif option == 2:
-        query = Queries().generateReport()
-        fetch_query(query)
+        fetch_query(Queries().generateReport())
     elif option == 3:
-        query = Queries().getDemographyOfPeriod()
-        fetch_query(query)
+        fetch_query(Queries().getDemographyOfPeriod())
     elif option == 4:
-        query = Queries().performCancellation()
-        delete_query(query)
+        delete_query(Queries().performCancellation())
     elif option == 5:
-        query = Queries().getStudyByNP()
-        fetch_query(query)
+        fetch_query(Queries().getStudyByNP())
     elif option == 6:
-        query = Queries().getStudyByResearcher()
-        fetch_query(query)
+        fetch_query(Queries().getStudyByResearcher())
     elif option == 7:
-        query = Queries().getStudyByType()
-        fetch_query(query)
+        fetch_query(Queries().getStudyByType())
     elif option == 8:
-        query = Feedback("service").add()
-        insert_query(query)
+        insert_query(Feedback("service").add())
     elif option == 9:
-        query = Feedback("feature").add()
-        insert_query(query)
+        insert_query(Feedback("feature").add())
     elif option == 10:
         query = ServiceTimings().add()
     elif option == 11:

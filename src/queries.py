@@ -26,7 +26,7 @@ class Queries():
 
     def get_year_range(self):
         self.year_range = input("Enter period in years (YYYY-YYYY): ")
-        return True
+        return perror("Invalid period") if not syntax.validate_year_range(self.year_range) else True
 
     def get_researcher_name(self):
         self.researcher_name = input("Enter the Name of the Researcher: ").lower()
@@ -69,7 +69,6 @@ class Queries():
 
     def performCancellation(self):
         repeat_and_error(self.get_booking_id)()
-
         query = ["DELETE FROM Booking where booking_id = '{}'".format(self.booking_id)]
         print(query)
         return query
@@ -78,8 +77,8 @@ class Queries():
         repeat_and_error(self.get_year_range)()
         y1, y2 = self.year_range.split('-')
 
-        query = ["SELECT * from Demography where time_stamp > '{}-01-01'"
-                 " and time_stamp < '{}-12-31'".format(y1, y2)]
+        query = ["SELECT * from Demography where time_stamp >= '{}-01-01'"
+                 " and time_stamp <= '{}-12-31'".format(y1, y2)]
         print(query)
         return query
 

@@ -24,6 +24,16 @@ def validate_date(date):
         return False
 
 
+def validate_year_range(year):
+    try:
+        y1, y2 = year.split('-')
+        a = datetime.datetime(year=int(y1), month=1, day=1)
+        a = datetime.datetime(year=int(y2), month=12, day=31)
+        return True
+    except ValueError:
+        return False
+
+
 def validate_time(time):
     try:
         hour, minute, second = map(int, time.split(':'))
