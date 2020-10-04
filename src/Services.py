@@ -109,9 +109,8 @@ class ServiceTimings:
 
     def get_day(self):
         self.day_of_service = int(input('Choose a day for service: '))
-        return perror(
-            "Day must be from one a feedback for a featureof the options") if not syntax.validate_range(
-            self.day_of_service, 1, len(self.day_enum)) else True
+        return perror("Day must be from one a feedback for a featureof the options") if \
+            not syntax.validate_range(self.day_of_service, 1, len(self.day_enum)) else True
 
     def get_time(self):
         self.timings = input('Enter the timings for service for above day(HH:MM:SS): ')

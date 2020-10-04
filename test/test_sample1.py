@@ -1,12 +1,15 @@
+import subprocess as sp
+import pymysql.cursors
+import config
 import sys
 
 sys.path.append('.')
-import src.Employee
+from src.queries import *
 
 
 def insert():
-    tmp = src.Employee.Employee()
-    print(tmp.hire())
+    tmp = getReportOfSpeciesOfNationalPark().generateReport()
+    print(tmp)
 
 
-insert()
+

@@ -7,35 +7,74 @@ from src.Department import Department
 from src.User import User
 from src.Services import *
 from src.Feedback import Feedback
+from src.queries import *
 
 
-def execute_query(query):
-
+def fetch_query(query):
     for qr in query:
         try:
             cur.execute(qr)
-            con.commit()
-            print("Inserted Into Database")
+            rows = cur.fetchall()
+            for row in rows:
+                print(row)
+            print("Fetched from Database")
+        except Exception as e:
+            con.rollback()
+            print("Failed to fetch from database")
+            print(">>>>>>>>>>>>>", e)
+
+
+def insert_query(query):
+    for qr in query:
+        try:
+            cur.execute(qr)
+            cur.commit()
+            print("Inserted into Database")
         except Exception as e:
             con.rollback()
             print("Failed to insert into database")
             print(">>>>>>>>>>>>>", e)
 
 
+def delete_query(query):
+    for qr in query:
+        try:
+            cur.execute(qr)
+            cur.commit()
+            print("Deleted from Database")
+        except Exception as e:
+            con.rollback()
+            print("Failed to delete from database")
+            print(">>>>>>>>>>>>>", e)
+
+
 def dispatch(option):
-    global query
     if option == 1:
         query = Employee().hire()
     elif option == 2:
-        query = Department().add()
+        query = Queries().generateReport()
+        fetch_query(query)
     elif option == 3:
-        query = User().hire()
+        query = Queries().getDemographyOfPeriod()
+        fetch_query(query)
     elif option == 4:
-        query = Services().add()
+        query = Queries().performCancellation()
+        delete_query(query)
+    elif option == 5:
+        query = Queries().getStudyByNP()
+        fetch_query(query)
+    elif option == 6:
+        query = Queries().getStudyByResearcher()
+        fetch_query(query)
+    elif option == 7:
+        query = Queries().getStudyByType()
+        fetch_query(query)
     elif option == 8:
         query = Feedback("service").add()
+        insert_query(query)
     elif option == 9:
         query = Feedback("feature").add()
+        insert_query(query)
     elif option == 10:
         query = ServiceTimings().add()
     elif option == 11:
@@ -43,8 +82,6 @@ def dispatch(option):
     else:
         print("Error: Invalid Option")
         return
-
-    execute_query(query)
 
 
 while True:
@@ -75,9 +112,12 @@ while True:
                 tmp = sp.call('clear', shell=True)
                 # Here taking example of Employee Mini-world
                 print("1. Hire an Employee ")
-                print("2. Add a new Department")
-                print("3. Hire a User")
-                print("4. Add a new Service")
+                print("2. Get Report of National Park")
+                print("3. Retrieve Demography of a period")
+                print("4. Perform a Booking Cancellation")
+                print("5. Retrieve studies of a National Park")
+                print("6. Retrieve studies done by Researcher")
+                print("7. Retrieve various type of studies")
                 print("8. Add a feedback for a service")
                 print("9. Add a feedback for a feature")
                 print("10. Add timings for service")

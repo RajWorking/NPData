@@ -18,7 +18,6 @@ class Employee:
         self.date_of_joining = None
         self.role = None
         self.works_for_dno = None
-        self.national_park = None
 
 
     def get_name(self):
@@ -60,10 +59,6 @@ class Employee:
         self.works_for_dno = int(input("Enter Department Number for above employee: "))
         return True
 
-    def get_national_park(self):
-        self.national_park = int(
-            input("Enter the Code of National Park in which the employee works: "))
-        return True
 
     def hire(self):
         print("Enter new Employee's details: ")
@@ -77,15 +72,14 @@ class Employee:
             repeat_and_error(self.get_doj)()
             repeat_and_error(self.get_role)()
             repeat_and_error(self.get_dno)()
-            repeat_and_error(self.get_national_park)()
 
             query = []
             query.append("INSERT INTO Employee( emp_Name, gender, emp_email, contact_number,  " \
                          "date_of_birth, date_of_joining, role, works_for_dno, national_park)" \
-                         "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+                         "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
                 self.emp_Name, self.gender, self.emp_email,
                 self.contact_number, self.date_of_birth, self.date_of_joining,
-                self.role, self.works_for_dno, self.national_park))
+                self.role, self.works_for_dno))
 
             print(query)
             return query
