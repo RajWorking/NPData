@@ -23,7 +23,7 @@ class AdminInterface:
             self.data_report,
             self.add_species,
             self.add_employee,
-            self.add_demography,
+            self.update_presence,
             self.service_info_report,
             self.update_presence
         ]
