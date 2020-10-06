@@ -1,6 +1,6 @@
 import pymysql.cursors
 
-from local import config
+import config
 from src.utils.utils import perror, psuccess
 
 
