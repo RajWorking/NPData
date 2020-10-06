@@ -24,6 +24,7 @@ class ScientificInterface:
             'Get studies done in a National Park',
             'Get Studies by their type',
             'Get National Parks of a species',
+            'Update Study Data',
             'Exit'
         ]
         self.functions = [
@@ -32,6 +33,7 @@ class ScientificInterface:
             self.getStudyByNationalPark,
             self.getStudyByType,
             self.getNationalParkofSpecies,
+            self.updateData
         ]
 
         self.curr_opt = 0
@@ -49,6 +51,17 @@ class ScientificInterface:
             return False
         else:
             return True
+
+    def get_study_type_options(self):
+        print("Choose one among the following studies: ")
+        for i in range(len(self.study_type_enum)):
+            print('{}. {}'.format(i + 1, self.study_type_enum[i]))
+
+    def get_study_type(self):
+        self.study_type = int(input('Choosing the following for study type: '))
+        return perror(
+            "Study type must be from one of the options") if not syntax.validate_range(
+            self.study_type, 1, len(self.study_type_enum)) else True
 
     def get_year_range(self):
         self.year_range = input("Enter period in years (YYYY-YYYY): ")
@@ -116,7 +129,7 @@ class ScientificInterface:
                 i += 1
 
             row = int(input("Choose the serial number to select the Researcher: "))
-            if not syntax.validate_range(row, 0, len(rows) - 1):
+            if not syntax.validate_range(row, 1, len(rows)):
                 perror('Invalid Input. Please choose again!')
                 continue
             query = "SELECT A.national_park, A.type, A.start_date, C.description, C.data_type" \
@@ -132,17 +145,6 @@ class ScientificInterface:
 
             input("\nPress ENTER to continue >> ")
             return
-
-    def get_study_type_options(self):
-        print("Choose one among the following studies: ")
-        for i in range(len(self.study_type_enum)):
-            print('{}. {}'.format(i + 1, self.study_type_enum[i]))
-
-    def get_study_type(self):
-        self.study_type = int(input('Choosing the following for study type: '))
-        return perror(
-            "Study type must be from one of the options") if not syntax.validate_range(
-            self.study_type, 1, len(self.study_type_enum)) else True
 
     def getStudyByType(self):
         print_header("Study Types")
@@ -189,6 +191,45 @@ class ScientificInterface:
             if ch != 'y':
                 return
             print("\n\n")
+
+    def updateData(self):
+
+        while True:
+            print_header("Update Data")
+            data = self.db.get_result(
+                "SELECT A.study_id, B.data_id, A.national_park, D.name, C.description from"
+                " Study A, Study_data B, Data C, Researcher D where A.researcher = D.researcher_id"
+                " and  A.study_id = B.study_id and B.data_id = C.data_id")
+
+            print("Here is the list of Studies\n")
+
+            i = 0
+            for row in data:
+                print('{}. {} by {} in ({})'.format(
+                    i + 1, row['description'], row['name'], row['national_park']))
+                i += 1
+
+            row = int(input("\nChoose the serial number for data to update: "))
+            if not syntax.validate_range(row, 1, len(data)):
+                perror('Invalid Input. Please choose again!')
+                continue
+
+            newDes = input("Enter new Description: ")
+            newLink = input("Enter new Data Link: ")
+            newType = input("Enter new Data Type: ")
+
+            ch = input("Are you sue you want to update? (y/n): ")
+            if (ch != 'y'):
+                return
+
+            query = ["UPDATE Data SET description = '{}' , data_link = '{}', data_type = '{}'" \
+                 " where data_id = {}".format(newDes, newLink, newType, data[row - 1]["data_id"])]
+
+            self.db.execute_query(query)
+            input("\nPress ENTER to Continue >> ")
+            return
+
+
 
     def loop(self):
         try:
