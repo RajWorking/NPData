@@ -1,3 +1,8 @@
+import subprocess as sp
+
+from pyfiglet import Figlet
+
+
 class BgColor:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -17,17 +22,41 @@ def perror(x):
     print(BgColor.WARNING + x + BgColor.ENDCLR)
 
 
+def print_header(x):
+    mp = sp.call('clear', shell=True)
+    f = Figlet(font='slant')
+    print(f.renderText(x))
+
+
+def ask(func, func2=None):
+    def inner():
+        if func2 is not None:
+            func2()
+        func()
+
+    return inner
+
+
+def _(x):
+    if x is None:
+        return 'NULL'
+    elif type(x) is str:
+        return "'{}'".format(x)
+    else:
+        return x
+
+
 def repeat_and_error(func, func2=None):
     def inner():
         if func2 is not None:
             func2()
-        for _ in range(1, 5):
+        for _ in range(3):
             try:
                 if func():
                     break
             except ValueError as e:
-                perror('Input not correct')
-            if _ == 4:
+                perror('Input is either null or does not match the type expected')
+            if _ == 2:
                 raise ValueError('Insertion Failed, too many wrong attempts')
 
     return inner

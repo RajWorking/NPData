@@ -1,130 +1,66 @@
-import subprocess as sp
-import pymysql.cursors
-import config
+import pymysql
 
-from src.Employee import Employee
-from src.Department import Department
-from src.User import User
-from src.Services import *
-from src.Feedback import Feedback
-from src.queries import *
-
-
-def fetch_query(query):
-    for qr in query:
-        try:
-            cur.execute(qr)
-            rows = cur.fetchall()
-            for row in rows:
-                print(row)
-            print("Fetched from Database")
-        except Exception as e:
-            con.rollback()
-            print("Failed to fetch from database")
-            print(">>>>>>>>>>>>>", e)
-
-
-def insert_query(query):
-    for qr in query:
-        try:
-            cur.execute(qr)
-            cur.commit()
-            print("Inserted into Database")
-        except Exception as e:
-            con.rollback()
-            print("Failed to insert into database")
-            print(">>>>>>>>>>>>>", e)
-
-
-def delete_query(query):
-    for qr in query:
-        try:
-            cur.execute(qr)
-            cur.commit()
-            print("Deleted from Database")
-        except Exception as e:
-            con.rollback()
-            print("Failed to delete from database")
-            print(">>>>>>>>>>>>>", e)
+import src.admin_interface
+import src.user_interface
+import src.scientific_interface
+import src.utils.database as db
+import src.utils.syntax_check as syntax
+from src.utils.utils import *
 
 
 def dispatch(option):
     if option == 1:
-        insert_query(Employee().hire())
-
+        f = Figlet(font='slant')
+        AI = src.admin_interface.AdminInterface(np)
+        AI.loop()
     elif option == 2:
-        fetch_query(Queries().generateReport())
+        f = Figlet(font='slant')
+        UI = src.user_interface.UserInterface(np)
+        UI.loop()
     elif option == 3:
-        fetch_query(Queries().getDemographyOfPeriod())
-    elif option == 4:
-        delete_query(Queries().performCancellation())
-    elif option == 5:
-        fetch_query(Queries().getStudyByNP())
-    elif option == 6:
-        fetch_query(Queries().getStudyByResearcher())
-    elif option == 7:
-        fetch_query(Queries().getStudyByType())
-    elif option == 8:
-        insert_query(Feedback("service").add())
-    elif option == 9:
-        insert_query(Feedback("feature").add())
-    elif option == 10:
-        query = ServiceTimings().add()
-    elif option == 11:
-        query = Department.remove()
+        f = Figlet(font='slant')
+        SI = src.scientific_interface.ScientificInterface(np)
+        SI.loop()
     else:
-        print("Error: Invalid Option")
+        perror("Error: Invalid Option")
         return
 
 
-while True:
-    tmp = sp.call('clear', shell=True)
+print_header('National Park')
 
+global np
+
+while True:
     try:
         # Set db name accordingly which have been create by you
         # Set host to the server's address if you don't want to use local SQL server
-        con = pymysql.connect(
-            host='localhost',
-            user=config.username,
-            password=config.password,
-            database=config.db,
-            port=config.port,
-            cursorclass=pymysql.cursors.DictCursor
-        )
-        tmp = sp.call('clear', shell=True)
+        np = db.Database()
 
-        if con.open:
-            print("Connected")
+        np.open_connection()
+
+        if np.con.open:
+            print("Connected to the National Park database")
+
         else:
             print("Failed to connect")
 
-        tmp = input("Enter any key to CONTINUE> ")
+        tmp = input("Press any key to start")
 
-        with con.cursor() as cur:
-            while (1):
+        with np.con.cursor() as np.cur:
+            while True:
                 tmp = sp.call('clear', shell=True)
-                # Here taking example of Employee Mini-world
-                print("1. Hire an Employee ")
-                print("2. Get Report of National Park")
-                print("3. Retrieve Demography of a period")
-                print("4. Perform a Booking Cancellation")
-                print("5. Retrieve studies of a National Park")
-                print("6. Retrieve studies done by Researcher")
-                print("7. Retrieve various type of studies")
-                print("8. Add a feedback for a service")
-                print("9. Add a feedback for a feature")
-                print("10. Add timings for service")
-                ch = int(input("Enter choice> "))
-                tmp = sp.call('clear', shell=True)
-                if ch >= 100:
-                    break
-                else:
-                    dispatch(ch)
+                print("Select the interface  you want to access")
+                print("1. Admin Interface")
+                print("2. User Interface")
+                print("3. Scientific Interface")
+                choice = int(input('>>> '))
+                if syntax.validate_range(choice, 1, 3):
+                    tmp = sp.call('clear', shell=True)
+                    dispatch(choice)
                     tmp = input("Enter any key to CONTINUE> ")
+                    if tmp == 'exit':
+                        break
 
-
-
-    except:
-        tmp = sp.call('clear', shell=True)
-        print("Connection Refused")
-        tmp = input("Enter any key to CONTINUE> ")
+    except pymysql.err.OperationalError as e:
+        print(e.args[0], ':', e.args[1])
+        tmp = input(">>>")
