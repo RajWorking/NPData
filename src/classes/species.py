@@ -136,8 +136,8 @@ class Species:
 
 			return q
 
-		except ValueError as e:
-			perror(e)
+		except Exception as e:
+			perror("error")
 
 
 class Presence:
@@ -177,7 +177,7 @@ class Presence:
 		return False
 
 	def get_attraction(self):
-		spicyfood = input("Is the species an attraction(True or False)")
+		spicyfood = input("Is the species an attraction? (True or False): ")
 		if spicyfood == "True":
 			self.is_attraction = True
 			return True
@@ -187,35 +187,35 @@ class Presence:
 		return False
 
 	def abundance_options(self):
-		print("Choose one among the abundance statuses of the species:")
+		print("Choose one among the abundance statuses of the species: ")
 		for i in range(len(self.abundance_enum)):
 			print('{}. {}'.format(i + 1, self.abundance_enum[i]))
 
 	def get_abundance(self):
-		self.abundance = to_int(input('Enter the corresponding option for the abundance status of the species:'))
+		self.abundance = to_int(input('Enter the corresponding option for the abundance status of the species: '))
 
 	def record_status_options(self):
-		print("Choose one among the record statuses of the species:")
+		print("Choose one among the record statuses of the species: ")
 		for i in range(len(self.record_status_enum)):
 			print('{}. {}'.format(i + 1, self.record_status_enum[i]))
 
 	def get_record_status(self):
 		self.record_status = to_int(
-			input('Enter the corresponding option for the record status of the species:'))
+			input('Enter the corresponding option for the record status of the species: '))
 
 	def get_record_date(self):
 		self.record_date = input("Enter Record Date (YYYY-MM-DD): ")
 
 	def occurrence_options(self):
-		print("Choose one among the occurrence values of the species:")
+		print("Choose one among the occurrence values of the species: ")
 		for i in range(len(self.occurrence_enum)):
 			print('{}. {}'.format(i + 1, self.occurrence_enum[i]))
 
 	def get_occurrence(self):
-		self.occurrence = to_int(input('Enter the corresponding option for the occurrence values of the species:'))
+		self.occurrence = to_int(input('Enter the corresponding option for the occurrence values of the species: '))
 
 	def get_population(self):
-		self.current_population = int(input('Enter the current population of the species in the National Park:'))
+		self.current_population = int(input('Enter the current population of the species in the National Park: '))
 
 	def add(self):
 		try:
@@ -243,14 +243,14 @@ class Presence:
 		try:
 			print_header('Update Species Data')
 			print("Press enter on empty string if you don't want to change the current value")
-			print("Current record status", f(row['record_status']), ":")
+			print("Current record status", f(row['record_status']), ": ")
 			ask(self.get_record_status, self.record_status_options)()
-			print("Current abundance status", f(row['abundance']), ":")
+			print("Current abundance status", f(row['abundance']), ": ")
 			ask(self.get_abundance, self.abundance_options)()
-			print("Current occurrence status", f(row['occurrence']), ":")
+			print("Current occurrence status", f(row['occurrence']), ": ")
 			ask(self.get_occurrence, self.occurrence_options)()
 			self.current_population = row['current_population']
-			print("Current population:", f(row['current_population']), ":")
+			print("Current population:", f(row['current_population']), ": ")
 			ask(self.get_population)()
 
 			if self.record_status is not None:
@@ -285,15 +285,15 @@ class Demography:
 			self.census_date = None
 
 	def get_population(self):
-		self.total_population = int(input('Enter the current population of the species in the National Park:'))
+		self.total_population = int(input('Enter the current population of the species in the National Park: '))
 
 	def get_avg_lifespan(self):
-		self.average_lifespan = float(input('Enter the recorded average lifespan in the census'))
+		self.average_lifespan = float(input('Enter the recorded average lifespan in the census: '))
 
 	def add(self):
 		try:
 			ask(self.get_census_date)()
-			ask(self.get_population())()
+			ask(self.get_population)()
 			ask(self.get_avg_lifespan)
 
 		except ValueError as e:

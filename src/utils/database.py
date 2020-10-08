@@ -32,6 +32,7 @@ class Database:
                 psuccess("Success")
             except Exception as e:
                 self.con.rollback()
-                perror("Failed to execute the operation", e)
+                perror("Failed to execute the operation")
+                inp = input('Press Enter to Continue')
                 return False
         return True

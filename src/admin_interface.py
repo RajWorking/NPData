@@ -110,7 +110,7 @@ class AdminInterface:
                                    f(spec_name),
                                    f(self.national_park.unitcode),
                                    f(presence.nativeness),
-                                   f(int(presence.is_attraction)),
+                                   f(presence.is_attraction),
                                    f(presence.abundance),
                                    f(presence.record_status),
                                    f(presence.record_date),
@@ -126,7 +126,7 @@ class AdminInterface:
 
     def add_demography(self):
 
-        print_header("Update Census")
+        print_header("Add Census")
         genus = None
         spec_name = None
         newvalue = None
@@ -137,7 +137,7 @@ class AdminInterface:
             rows = self.db.get_result(qq)
 
             if len(rows) > 0:
-                target_presence = rows['presence_id']
+                target_presence = rows[0]['presence_id']
                 demo = Demography()
                 demo.add()
                 qq = "INSERT INTO Demography(presence_id, time_stamp, total_population, average_lifespan)" \
@@ -174,7 +174,7 @@ class AdminInterface:
                 " Feature_Feedback B where A.feature_id = B.feature_id and A.feature_id" \
                 " in ( SELECT feature_id from Zone C , Zone_contains D where" \
                 " C.zone_number = D.zone_number and C.belongs_to = '{}' ) " \
-                "GROUP BY B.feature_id having avg(rating) >= {}".format(self.national_park.unitcode, des_rating)
+                "GROUP BY B.feature_id having avg(rating) >= {} ORDER BY avg(rating) DESC".format(self.national_park.unitcode, des_rating)
 
         rows = self.db.get_result(query)
         print(tabulate(rows, headers="keys", tablefmt="fancy_grid"))

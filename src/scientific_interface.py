@@ -74,7 +74,7 @@ class ScientificInterface:
             a = datetime.datetime(year=int(y2), month=12, day=31)
             return True
         except ValueError:
-            return False
+            return Falsek
 
     def getDemographyOfPeriod(self):
 
